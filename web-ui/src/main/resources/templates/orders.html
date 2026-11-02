@@ -1,51 +1,141 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head th:replace="~{fragments/layout :: head('My orders', ${autoRefresh})}"></head>
-<body>
+
+<body class="orders-page">
+
 <header th:replace="~{fragments/layout :: header}"></header>
 
 <main class="container">
-    <div class="page-head">
-        <h1>My orders</h1>
-        <p th:if="${autoRefresh}" class="muted">Some orders are still processing. This page refreshes automatically.</p>
+
+    <!-- Page Header -->
+    <section class="orders-hero">
+        <div>
+            <span class="section-label">YOUR ACCOUNT</span>
+            <h1>My Orders</h1>
+            <p>Track your purchases and check your order status.</p>
+        </div>
+
+        <div class="orders-hero-icon">📦</div>
+    </section>
+
+    <!-- Auto Refresh Notice -->
+    <div th:if="${autoRefresh}" class="refresh-notice">
+        <span class="refresh-dot"></span>
+        Some orders are still processing. This page refreshes automatically.
     </div>
 
+    <!-- Flash Messages -->
     <div th:replace="~{fragments/layout :: flash}"></div>
 
-    <p th:if="${#lists.isEmpty(orders)}" class="empty">
-        No orders yet. <a th:href="@{/products}">Grab a deal</a>.
-    </p>
+    <!-- Empty State -->
+    <section th:if="${#lists.isEmpty(orders)}"
+             class="empty-orders">
 
-    <div th:unless="${#lists.isEmpty(orders)}" class="card table-card">
-        <table>
-            <thead>
-            <tr>
-                <th>Order</th>
-                <th>Product</th>
-                <th class="num">Qty</th>
-                <th class="num">Amount</th>
-                <th>Status</th>
-                <th>Placed</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="o : ${orders}">
-                <td><a th:href="@{/orders/{id}(id=${o.id()})}" th:text="'#' + ${o.shortId()}">#abc</a></td>
-                <td th:text="${productNames.containsKey(o.productId())} ? ${productNames.get(o.productId())} : 'Product #' + ${o.productId()}">Product</td>
-                <td class="num" th:text="${o.quantity()}">1</td>
-                <td class="num" th:text="'₹' + ${#numbers.formatDecimal(o.amount(), 1, 'COMMA', 2, 'POINT')}">₹0</td>
-                <td>
-                    <span class="badge"
-                          th:classappend="${o.confirmed()} ? 'success' : (${o.cancelled()} ? 'danger' : 'warning')"
-                          th:text="${o.status()}">PENDING</span>
-                </td>
-                <td class="muted" th:text="${o.createdLabel()}">today</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="empty-orders-icon">🛍️</div>
+
+        <h2>No orders yet</h2>
+
+        <p>You haven't purchased anything yet. Explore our latest flash deals.</p>
+
+        <a th:href="@{/products}" class="orders-shop-button">
+            Explore Products <span>↗</span>
+        </a>
+
+    </section>
+
+    <!-- Orders Table -->
+    <section th:unless="${#lists.isEmpty(orders)}"
+             class="orders-section">
+
+        <div class="orders-heading">
+            <div>
+                <h2>Order History</h2>
+                <p>All your recent purchases in one place.</p>
+            </div>
+
+            <span class="orders-count">
+                <span>✦</span> Your Orders
+            </span>
+        </div>
+
+        <div class="orders-table-card">
+
+            <div class="table-responsive">
+
+                <table class="orders-table">
+
+                    <thead>
+                    <tr>
+                        <th>ORDER ID</th>
+                        <th>PRODUCT</th>
+                        <th class="num">QUANTITY</th>
+                        <th class="num">AMOUNT</th>
+                        <th>STATUS</th>
+                        <th>ORDER DATE</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="o : ${orders}">
+
+                        <td>
+                            <a th:href="@{/orders/{id}(id=${o.id()})}"
+                               class="order-id"
+                               th:text="'#' + ${o.shortId()}">
+                                #abc123
+                            </a>
+                        </td>
+
+                        <td>
+                            <span class="order-product"
+                                  th:text="${productNames.containsKey(o.productId())} ? productNames.get(o.productId()) : 'Product #' + o.productId()">
+                                Product Name
+                            </span>
+                        </td>
+
+                        <td class="num"
+                            th:text="${o.quantity()}">
+                            1
+                        </td>
+
+                        <td class="num order-amount"
+                            th:text="'₹' + ${#numbers.formatDecimal(o.amount(), 1, 'COMMA', 2, 'POINT')}">
+                            ₹0.00
+                        </td>
+
+                        <td>
+                            <span class="order-status"
+                                  th:classappend="${o.confirmed()} ? ' status-confirmed' : (${o.cancelled()} ? ' status-cancelled' : ' status-pending')"
+                                  th:text="${o.status()}">
+                                PENDING
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="order-date"
+                                  th:text="${o.createdLabel()}">
+                                Today
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </main>
 
 <footer th:replace="~{fragments/layout :: footer}"></footer>
+
 </body>
 </html>
