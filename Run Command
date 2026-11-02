@@ -27,3 +27,9 @@ docker start dps-postgres
 # UI:      http://localhost:8090   (bob)
 # MailHog: http://localhost:8025
 # Health:  http://localhost:8080/actuator/health
+
+
+
+git add .
+git commit -m "Dark green navbar for all pages"
+git push
