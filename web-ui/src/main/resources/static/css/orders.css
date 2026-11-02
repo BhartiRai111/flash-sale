@@ -20,7 +20,7 @@
         radial-gradient(ellipse at 82% 8%, rgba(25, 190, 135, .15), transparent 34%),
         radial-gradient(ellipse at 8% 35%, rgba(0, 111, 83, .18), transparent 36%),
         linear-gradient(145deg, #04130f 0%, #08231c 48%, #041510 100%);
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
     isolation: isolate;
 }
@@ -582,3 +582,265 @@
         transition-duration: .01ms !important;
     }
 }
+
+
+/* =========================================================
+   MATCH orders.html CLASS NAMES
+   orders.html uses these class names; map them onto the
+   same futuristic styles defined above (no new look).
+   Also neutralises the old light-theme rules in app.css.
+   ========================================================= */
+
+.orders-page main.container {
+    max-width: 1160px;
+    padding: 54px 16px 76px;
+}
+
+/* Hero label + icon */
+.orders-page .orders-hero .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--orders-mint);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.orders-page .orders-hero .section-label::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--orders-mint);
+    box-shadow: 0 0 10px var(--orders-mint);
+}
+
+.orders-page .orders-hero-icon {
+    justify-self: end;
+    width: 140px;
+    height: 140px;
+    display: grid;
+    place-items: center;
+    margin-right: 24px;
+    font-size: 64px;
+    border: 1px solid rgba(112,255,208,.25);
+    border-radius: 36px;
+    background: rgba(36,230,173,.08);
+    box-shadow: 0 0 45px rgba(36,230,173,.12), inset 0 1px rgba(255,255,255,.06);
+    animation: orders-float 5.5s ease-in-out infinite;
+}
+
+/* Auto refresh: the HTML has its own dot, so drop the ::before dot */
+.orders-page .refresh-notice::before {
+    content: none;
+}
+
+.orders-page .refresh-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--orders-mint);
+    animation: orders-pulse 1.5s ease-in-out infinite;
+}
+
+/* Section heading */
+.orders-page .orders-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.orders-page .orders-heading h2 {
+    margin: 0;
+    color: #edfff7;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+
+.orders-page .orders-heading p {
+    margin: 7px 0 0;
+    color: var(--orders-muted);
+    font-size: 13px;
+}
+
+.orders-page .orders-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    color: #9fffdc;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    border: 1px solid rgba(112,255,208,.2);
+    border-radius: 999px;
+    background: rgba(36,230,173,.09);
+}
+
+/* Table card */
+.orders-page .orders-table-card {
+    padding: 8px;
+    border: 1px solid var(--orders-line);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(10,43,34,.92), rgba(5,25,20,.94));
+    box-shadow: 0 22px 55px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.035);
+    overflow: hidden;
+}
+
+.orders-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(112,255,208,.35) transparent;
+}
+
+.orders-page .order-amount {
+    color: var(--orders-mint);
+    font-weight: 800;
+}
+
+/* CONFIRMED = default mint pill (override old light badge from app.css) */
+.orders-page .status-confirmed {
+    color: #9fffdc;
+    border-color: rgba(112,255,208,.2);
+    background: rgba(36,230,173,.09);
+}
+
+/* Empty state */
+.orders-page .empty-orders {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 42px 20px;
+    text-align: center;
+    border: 1px dashed rgba(112,255,208,.22);
+    border-radius: 18px;
+    background: rgba(4, 24, 18, .45);
+}
+
+.orders-page .empty-orders-icon {
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+    font-size: 34px;
+    border: 1px solid rgba(112,255,208,.25);
+    border-radius: 23px;
+    background: rgba(36,230,173,.08);
+    box-shadow: 0 0 35px rgba(36,230,173,.08);
+}
+
+.orders-page .empty-orders h2 {
+    margin: 0 0 9px;
+    color: #edfff7;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.orders-page .empty-orders p {
+    max-width: 390px;
+    margin: 0 0 22px;
+    color: var(--orders-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.orders-page .orders-shop-button {
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 21px;
+    color: #032219;
+    font-size: 13px;
+    font-weight: 850;
+    border: 1px solid rgba(192,255,233,.75);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #9affdf, #35e8b0);
+    box-shadow: 0 9px 26px rgba(36,230,173,.18), inset 0 1px rgba(255,255,255,.65);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.orders-page .orders-shop-button span {
+    font-size: 16px;
+}
+
+.orders-page .orders-shop-button:hover {
+    color: #021b13;
+    transform: translateY(-3px);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 32px rgba(36,230,173,.25);
+}
+
+/* Footer */
+.orders-page footer {
+    color: var(--orders-muted);
+    border-top-color: var(--orders-line);
+}
+
+@keyframes orders-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 13px var(--orders-mint); }
+    50% { opacity: .55; box-shadow: 0 0 4px var(--orders-mint); }
+}
+
+@media (max-width: 760px) {
+    .orders-page main.container {
+        padding: 28px 14px 48px;
+    }
+
+    .orders-page .orders-hero-icon {
+        justify-self: start;
+        width: 105px;
+        height: 105px;
+        margin: 12px 0 0;
+        border-radius: 29px;
+        font-size: 48px;
+    }
+
+    .orders-page .orders-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .orders-page .orders-table-card {
+        padding: 7px;
+        border-radius: 17px;
+    }
+}
+
+@media (max-width: 520px) {
+    .orders-page main.container {
+        padding: 20px 11px 40px;
+    }
+
+    .orders-page .orders-hero-icon {
+        width: 76px;
+        height: 76px;
+        border-radius: 22px;
+        font-size: 36px;
+    }
+
+    .orders-page .orders-heading h2 {
+        font-size: 21px;
+    }
+
+    .orders-page .orders-count {
+        padding: 8px 12px;
+    }
+
+    .orders-page .empty-orders {
+        min-height: 290px;
+        padding: 34px 18px;
+    }
+}
+
