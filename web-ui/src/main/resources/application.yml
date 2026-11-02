@@ -1,0 +1,23 @@
+server:
+  port: 8090
+  servlet:
+    session:
+      timeout: 60m       # same as the JWT lifetime
+
+spring:
+  application:
+    name: web-ui
+  thymeleaf:
+    cache: ${THYMELEAF_CACHE:false}   # false = edit templates and refresh without restarting
+
+gateway:
+  url: ${GATEWAY_URL:http://localhost:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}

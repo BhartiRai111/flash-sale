@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/layout :: head('Products', false)}"></head>
+
+<body class="products-page">
+
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+
+    <!-- Hero Section -->
+    <section class="shop-hero">
+        <div class="hero-content">
+            <span class="hero-tag">
+                <span class="live-dot"></span>
+                LIMITED TIME OFFERS
+            </span>
+
+            <h1>
+                Today's flash deals.
+                <span>Tomorrow's regrets.</span>
+            </h1>
+
+            <p>
+                Discover amazing products at exciting prices.
+                Grab your favourites before they're gone.
+            </p>
+
+            <a href="#products" class="hero-button">
+                Explore deals <span>↓</span>
+            </a>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-circle"></div>
+            <div class="hero-icon">⚡</div>
+            <div class="hero-floating-card">
+                <span>FLASH SALE</span>
+                <strong>Hot Deals!</strong>
+                <small>Limited stock available</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flash Messages -->
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+
+        <div class="products-heading">
+            <div>
+                <span class="section-label">OUR COLLECTION</span>
+                <h2>Explore Products</h2>
+                <p>Find something you'll love.</p>
+            </div>
+
+            <div class="deal-count">
+                <span>✦</span> Exclusive Deals
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(products)}"
+             class="empty-products">
+            <div class="empty-icon">🛍️</div>
+            <h3>No products available</h3>
+            <p>Check back later for exciting deals.</p>
+        </div>
+
+        <!-- Product Grid (only rendered when there are products) -->
+        <div th:unless="${#lists.isEmpty(products)}"
+             class="products-grid">
+
+            <a th:each="p : ${products}"
+               th:href="@{/products/{id}(id=${p.id()})}"
+               class="shop-product-card">
+
+                <div class="product-visual">
+                    <span class="product-flash">⚡ FLASH DEAL</span>
+                    <span class="product-emoji">🛍️</span>
+
+                    <span th:if="${p.soldOut()}"
+                          class="product-overlay">
+                        SOLD OUT
+                    </span>
+                </div>
+
+                <div class="product-info">
+
+                    <div class="product-name"
+                         th:text="${p.name()}">
+                        Product Name
+                    </div>
+
+                    <div class="product-price">
+                        <span th:text="'₹' + ${#numbers.formatDecimal(p.price(), 1, 'COMMA', 2, 'POINT')}">
+                            ₹0.00
+                        </span>
+                        <span class="price-label">Special Price</span>
+                    </div>
+
+                    <!-- Low-stock threshold computed here so the page doesn't depend on a lowStock() method -->
+                    <div class="product-bottom"
+                         th:with="lowStock=${!p.soldOut() and p.availableStock() <= 5}">
+
+                        <span th:if="${p.soldOut()}"
+                              class="stock-status stock-sold">
+                            ● Sold out
+                        </span>
+
+                        <span th:if="${lowStock}"
+                              class="stock-status stock-low"
+                              th:text="'● Only ' + ${p.availableStock()} + ' left'">
+                            ● Only 3 left
+                        </span>
+
+                        <span th:if="${!p.soldOut() and !lowStock}"
+                              class="stock-status stock-available"
+                              th:text="'● ' + ${p.availableStock()} + ' in stock'">
+                            ● 50 in stock
+                        </span>
+
+                        <span class="product-arrow">↗</span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+</body>
+</html>

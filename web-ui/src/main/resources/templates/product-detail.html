@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head(${product.name()}, false)}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container narrow">
+    <a th:href="@{/products}" class="back">← All products</a>
+
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="card">
+        <h1 th:text="${product.name()}">Product</h1>
+        <div class="price big" th:text="'₹' + ${#numbers.formatDecimal(product.price(), 1, 'COMMA', 2, 'POINT')}">₹0</div>
+        <p>
+            <span th:if="${product.soldOut()}" class="badge danger">Sold out</span>
+            <span th:unless="${product.soldOut()}" class="badge"
+                  th:classappend="${product.lowStock()} ? 'warning' : 'success'"
+                  th:text="${product.availableStock()} + ' left in stock'">10 left</span>
+        </p>
+
+        <!-- Not logged in -->
+        <div th:if="${currentUser == null}">
+            <a th:href="@{/login}" class="button">Log in to buy</a>
+        </div>
+
+        <!-- Buy form -->
+        <form th:if="${currentUser != null and !product.soldOut()}"
+              th:action="@{/products/{id}/buy(id=${product.id()})}" th:object="${buyForm}" method="post"
+              class="form" onsubmit="this.querySelector('button').disabled = true;">
+            <!-- Same key on every resubmit of this page = the server creates only one order -->
+            <input type="hidden" th:field="*{idempotencyKey}">
+
+            <label for="quantity">Quantity (max 5)</label>
+            <input id="quantity" type="number" min="1" max="5" th:field="*{quantity}">
+            <p class="field-error" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></p>
+
+            <label for="customerEmail">Email for order updates</label>
+            <input id="customerEmail" type="email" th:field="*{customerEmail}">
+            <p class="field-error" th:if="${#fields.hasErrors('customerEmail')}" th:errors="*{customerEmail}"></p>
+
+            <button type="submit" class="button">Buy now</button>
+            <p class="hint">Tip: orders above ₹50,000 are declined by the mock payment provider, so you can watch the stock being released.</p>
+        </form>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

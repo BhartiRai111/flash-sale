@@ -1,0 +1,75 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: order-service
+              uri: ${ORDER_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: ${RATE_LIMIT_REPLENISH:5}
+                    redis-rate-limiter.burstCapacity: ${RATE_LIMIT_BURST:10}
+                    redis-rate-limiter.requestedTokens: 1
+                    key-resolver: "#{@userKeyResolver}"
+                - name: CircuitBreaker
+                  args:
+                    name: orderService
+                    fallbackUri: forward:/fallback/order-service
+
+            - id: inventory-service
+              uri: ${INVENTORY_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/api/products/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: inventoryService
+                    fallbackUri: forward:/fallback/inventory-service
+
+            - id: payment-service
+              uri: ${PAYMENT_SERVICE_URL:http://localhost:8083}
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: paymentService
+                    fallbackUri: forward:/fallback/payment-service
+
+security:
+  jwt:
+    # Must be at least 32 characters. Override with the JWT_SECRET environment variable.
+    secret: ${JWT_SECRET:local-dev-secret-change-me-0123456789abcdef}
+    expiration-minutes: 60
+  demo-users:
+    admin:
+      password: admin123
+      roles: [ADMIN, USER]
+    alice:
+      password: alice123
+      roles: [USER]
+    bob:
+      password: bob123
+      roles: [USER]
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,gateway
+  metrics:
+    tags:
+      application: ${spring.application.name}

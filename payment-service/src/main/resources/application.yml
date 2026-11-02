@@ -1,0 +1,66 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: payment-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/paymentdb}
+    username: ${DB_USER:flashsale}
+    password: ${DB_PASSWORD:flashsale}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    consumer:
+      group-id: payment-service
+      auto-offset-reset: earliest
+    producer:
+      acks: all
+
+payment:
+  mock:
+    # Orders above this amount are declined -> lets you test the compensation flow
+    max-amount: ${PAYMENT_MAX_AMOUNT:50000}
+    # 10% of calls fail with a transient timeout -> lets you see retries in the logs/metrics
+    failure-rate: ${PAYMENT_FAILURE_RATE:0.1}
+
+resilience4j:
+  retry:
+    instances:
+      paymentGateway:
+        max-attempts: 3
+        wait-duration: 300ms
+        enable-exponential-backoff: true
+        exponential-backoff-multiplier: 2
+        ignore-exceptions:
+          - com.bharti.flashsale.payment.gateway.MockPaymentGateway$PaymentDeclinedException
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+  circuitbreaker:
+    instances:
+      paymentGateway:
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15s
+        register-health-indicator: true
+        ignore-exceptions:
+          - com.bharti.flashsale.payment.gateway.MockPaymentGateway$PaymentDeclinedException
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics,circuitbreakers,retries
+  health:
+    circuitbreakers:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}

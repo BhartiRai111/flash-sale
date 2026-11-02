@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order update</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #222; max-width: 560px; margin: 0 auto;">
+<h2 th:if="${confirmed}" style="color: #1a7f37;">Order confirmed 🎉</h2>
+<h2 th:unless="${confirmed}" style="color: #b42318;">Order cancelled</h2>
+
+<p th:if="${confirmed}">Great news! You got it before it sold out. Your payment was successful.</p>
+<p th:unless="${confirmed}">
+    Sorry, we could not complete your order.
+    <span th:if="${event.reason() != null}">Reason: <strong th:text="${event.reason()}">reason</strong></span>
+</p>
+
+<table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
+    <tr>
+        <td style="padding: 6px 0; color: #666;">Order ID</td>
+        <td style="padding: 6px 0;" th:text="${event.orderId()}">order-id</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">Product ID</td>
+        <td style="padding: 6px 0;" th:text="${event.productId()}">1</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">Quantity</td>
+        <td style="padding: 6px 0;" th:text="${event.quantity()}">1</td>
+    </tr>
+    <tr>
+        <td style="padding: 6px 0; color: #666;">Amount</td>
+        <td style="padding: 6px 0;" th:text="'₹ ' + ${event.amount()}">₹ 0</td>
+    </tr>
+</table>
+
+<p style="margin-top: 24px; color: #888; font-size: 12px;">Flash Sale Demo · this is an automated message</p>
+</body>
+</html>

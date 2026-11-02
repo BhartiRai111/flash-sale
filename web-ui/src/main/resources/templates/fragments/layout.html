@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+
+<!-- Common Head Fragment -->
+<head th:fragment="head(title, refresh)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta th:if="${refresh}"
+          http-equiv="refresh"
+          content="2">
+
+    <title th:text="${title} + ' · Flash Sale'">
+        Flash Sale
+    </title>
+
+    <!-- Common Stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+    <!-- Login Page Stylesheet -->
+    <link rel="stylesheet"
+          th:if="${title == 'Log in'}"
+          th:href="@{/css/login.css}">
+</head>
+
+<!-- Header Fragment -->
+<header th:fragment="header" class="topbar">
+    <div class="container topbar-inner">
+
+        <a th:href="@{/products}" class="brand">
+            ⚡ Flash Sale
+        </a>
+
+        <nav class="nav">
+
+            <a th:href="@{/products}">Products</a>
+
+            <a th:if="${currentUser != null}"
+               th:href="@{/orders}">
+                My orders
+            </a>
+
+            <a th:if="${currentUser != null and currentUser.isAdmin()}"
+               th:href="@{/admin/products}">
+                Admin
+            </a>
+
+            <span th:if="${currentUser != null}"
+                  class="user-chip"
+                  th:text="${currentUser.username()}">
+                alice
+            </span>
+
+            <form th:if="${currentUser != null}"
+                  th:action="@{/logout}"
+                  method="post"
+                  class="inline">
+
+                <button type="submit" class="link-button">
+                    Log out
+                </button>
+
+            </form>
+
+            <a th:if="${currentUser == null}"
+               th:href="@{/login}"
+               class="button small">
+                Log in
+            </a>
+
+        </nav>
+    </div>
+</header>
+
+<!-- Flash Messages Fragment -->
+<div th:fragment="flash">
+
+    <div th:if="${success}"
+         class="alert success"
+         th:text="${success}">
+        Done
+    </div>
+
+    <div th:if="${error}"
+         class="alert error"
+         th:text="${error}">
+        Error
+    </div>
+
+</div>
+
+<!-- Footer Fragment -->
+<footer th:fragment="footer" class="footer">
+    <div class="container">
+        Spring Boot microservices demo · UI → API Gateway →
+        Order / Inventory / Payment / Notification
+    </div>
+</footer>
+
+</body>
+</html>

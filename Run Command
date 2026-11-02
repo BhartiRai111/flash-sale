@@ -1,0 +1,29 @@
+
+
+# ===== 1. Pehli baar / fresh start =====
+docker stop dps-postgres
+docker compose up -d postgres redis kafka mailhog api-gateway order-service inventory-service payment-service notification-service web-ui
+docker compose ps                             # 1 min baad, sab Up hone chahiye
+
+# ===== 2. Roz ka kaam =====
+docker compose logs -f order-service          # ek service ke live logs (Ctrl+C se band)
+docker compose restart payment-service        # ek service restart
+docker compose stop payment-service           # ek service band (Din 8 ke experiments)
+docker compose start payment-service          # wapas chalu
+docker compose up -d --build order-service    # code badla toh sirf us service ko rebuild
+
+# ===== 3. Kaam khatam =====
+docker compose stop                           # sab band, data safe
+
+# ===== 4. Agle din =====
+docker stop dps-postgres
+docker compose start                          # jo band kiya tha sab wapas
+
+# ===== 5. DPS pe wapas jaana ho =====
+docker compose stop
+docker start dps-postgres
+
+
+# UI:      http://localhost:8090   (bob)
+# MailHog: http://localhost:8025
+# Health:  http://localhost:8080/actuator/health

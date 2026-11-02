@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('My orders', ${autoRefresh})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container">
+    <div class="page-head">
+        <h1>My orders</h1>
+        <p th:if="${autoRefresh}" class="muted">Some orders are still processing. This page refreshes automatically.</p>
+    </div>
+
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <p th:if="${#lists.isEmpty(orders)}" class="empty">
+        No orders yet. <a th:href="@{/products}">Grab a deal</a>.
+    </p>
+
+    <div th:unless="${#lists.isEmpty(orders)}" class="card table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>Order</th>
+                <th>Product</th>
+                <th class="num">Qty</th>
+                <th class="num">Amount</th>
+                <th>Status</th>
+                <th>Placed</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="o : ${orders}">
+                <td><a th:href="@{/orders/{id}(id=${o.id()})}" th:text="'#' + ${o.shortId()}">#abc</a></td>
+                <td th:text="${productNames.containsKey(o.productId())} ? ${productNames.get(o.productId())} : 'Product #' + ${o.productId()}">Product</td>
+                <td class="num" th:text="${o.quantity()}">1</td>
+                <td class="num" th:text="'₹' + ${#numbers.formatDecimal(o.amount(), 1, 'COMMA', 2, 'POINT')}">₹0</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${o.confirmed()} ? 'success' : (${o.cancelled()} ? 'danger' : 'warning')"
+                          th:text="${o.status()}">PENDING</span>
+                </td>
+                <td class="muted" th:text="${o.createdLabel()}">today</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="~{fragments/layout :: head('Log in', false)}"></head>
+
+<body class="login-body">
+
+<div class="login-wrapper">
+
+    <!-- Left Section -->
+    <section class="login-banner">
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+            <span>YourBrand</span>
+        </div>
+
+        <div class="banner-content">
+            <span class="welcome-tag">WELCOME BACK</span>
+
+            <h1>Manage your work.<br>
+                <span>Make it happen.</span>
+            </h1>
+
+            <p>
+                Everything you need, all in one place.
+                Sign in and continue where you left off.
+            </p>
+
+            <div class="banner-decoration">
+                <div class="decoration-circle circle-one"></div>
+                <div class="decoration-circle circle-two"></div>
+                <div class="decoration-card">
+                    <span class="status-dot"></span>
+                    Your workspace is ready
+                    <strong>Let's get started →</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="banner-footer">
+            © 2026 YourBrand. All rights reserved.
+        </div>
+    </section>
+
+    <!-- Right Section -->
+    <main class="login-main">
+
+        <div class="login-card">
+
+            <div class="mobile-brand">
+                <div class="brand-icon">✦</div>
+                <strong>YourBrand</strong>
+            </div>
+
+            <div class="login-heading">
+                <span class="heading-label">ACCOUNT LOGIN</span>
+                <h2>Welcome back 👋</h2>
+                <p>Enter your details to access your account.</p>
+            </div>
+
+            <div th:replace="~{fragments/layout :: flash}"></div>
+
+            <form th:action="@{/login}"
+                  th:object="${loginForm}"
+                  method="post"
+                  class="login-form">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">♙</span>
+                        <input id="username"
+                               type="text"
+                               th:field="*{username}"
+                               placeholder="Enter your username"
+                               autocomplete="username"
+                               autofocus>
+                    </div>
+
+                    <p class="field-error"
+                       th:if="${#fields.hasErrors('username')}"
+                       th:errors="*{username}"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">♧</span>
+
+                        <input id="password"
+                               type="password"
+                               th:field="*{password}"
+                               placeholder="Enter your password"
+                               autocomplete="current-password">
+
+                        <button type="button"
+                                class="password-toggle"
+                                onclick="togglePassword()">
+                            Show
+                        </button>
+                    </div>
+
+                    <p class="field-error"
+                       th:if="${#fields.hasErrors('password')}"
+                       th:errors="*{password}"></p>
+                </div>
+
+                <button type="submit" class="login-button">
+                    <span>Sign in to your account</span>
+                    <span class="button-arrow">→</span>
+                </button>
+
+            </form>
+
+            <div class="demo-section">
+                <div class="demo-divider">
+                    <span>DEMO CREDENTIALS</span>
+                </div>
+
+                <div class="demo-user">
+                    <div>
+                        <span class="demo-role">USER ACCOUNT</span>
+                        <strong>alice / alice123</strong>
+                    </div>
+                    <button type="button"
+                            onclick="fillLogin('alice','alice123')">
+                        Use
+                    </button>
+                </div>
+
+                <div class="demo-user">
+                    <div>
+                        <span class="demo-role">USER ACCOUNT</span>
+                        <strong>bob / bob123</strong>
+                    </div>
+                    <button type="button"
+                            onclick="fillLogin('bob','bob123')">
+                        Use
+                    </button>
+                </div>
+
+                <div class="demo-user">
+                    <div>
+                        <span class="demo-role">ADMIN ACCOUNT</span>
+                        <strong>admin / admin123</strong>
+                    </div>
+                    <button type="button"
+                            onclick="fillLogin('admin','admin123')">
+                        Use
+                    </button>
+                </div>
+            </div>
+
+            <p class="login-bottom">
+                Secure login · Your workspace, your control.
+            </p>
+
+        </div>
+    </main>
+</div>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+
+<script>
+    function togglePassword() {
+        const password = document.getElementById('password');
+        const button = document.querySelector('.password-toggle');
+
+        if (password.type === 'password') {
+            password.type = 'text';
+            button.textContent = 'Hide';
+        } else {
+            password.type = 'password';
+            button.textContent = 'Show';
+        }
+    }
+
+    function fillLogin(username, password) {
+        document.getElementById('username').value = username;
+        document.getElementById('password').value = password;
+    }
+</script>
+
+</body>
+</html>

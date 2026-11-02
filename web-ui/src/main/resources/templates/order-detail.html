@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/layout :: head('Order', ${autoRefresh})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container narrow">
+    <a th:href="@{/orders}" class="back">← My orders</a>
+
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="card">
+        <div class="order-head">
+            <h1 th:text="'Order #' + ${order.shortId()}">Order</h1>
+            <span class="badge big"
+                  th:classappend="${order.confirmed()} ? 'success' : (${order.cancelled()} ? 'danger' : 'warning')"
+                  th:text="${order.status()}">PENDING</span>
+        </div>
+
+        <!-- The saga, step by step -->
+        <ol class="steps">
+            <li class="done">
+                <strong>Order placed</strong>
+                <span class="muted" th:text="${order.createdLabel()}">time</span>
+            </li>
+            <li th:classappend="${order.pending()} ? 'active' : (${order.confirmed()} ? 'done' : 'failed')">
+                <strong>Stock reserved &amp; payment</strong>
+                <span class="muted" th:if="${order.pending()}">Inventory and payment services are working on it…</span>
+                <span class="muted" th:if="${order.confirmed()}">Stock reserved and payment received</span>
+                <span class="muted" th:if="${order.cancelled()}" th:text="${order.failureReason()}">reason</span>
+            </li>
+            <li th:classappend="${order.confirmed()} ? 'done' : (${order.cancelled()} ? 'failed' : '')">
+                <strong th:text="${order.cancelled()} ? 'Order cancelled' : 'Order confirmed'">Order confirmed</strong>
+                <span class="muted" th:unless="${order.pending()}" th:text="${order.updatedLabel()}">time</span>
+                <span class="muted" th:if="${order.cancelled()}">Any reserved stock was released for other buyers.</span>
+            </li>
+        </ol>
+
+        <table class="details">
+            <tr><th>Product</th><td th:text="${productName}">Product</td></tr>
+            <tr><th>Quantity</th><td th:text="${order.quantity()}">1</td></tr>
+            <tr><th>Unit price</th><td th:text="'₹' + ${#numbers.formatDecimal(order.unitPrice(), 1, 'COMMA', 2, 'POINT')}">₹0</td></tr>
+            <tr><th>Total</th><td><strong th:text="'₹' + ${#numbers.formatDecimal(order.amount(), 1, 'COMMA', 2, 'POINT')}">₹0</strong></td></tr>
+            <tr><th>Order ID</th><td><code th:text="${order.id()}">uuid</code></td></tr>
+        </table>
+
+        <p th:if="${order.pending()}" class="hint">This page refreshes every 2 seconds until the order is confirmed or cancelled.</p>
+        <p th:unless="${order.pending()}" class="hint">An email with this update was sent (open MailHog at localhost:8025 to see it).</p>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
