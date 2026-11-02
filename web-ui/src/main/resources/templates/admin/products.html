@@ -1,69 +1,106 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="~{fragments/layout :: head('Admin', false)}"></head>
-<body>
+<body class="admin-page">
 <header th:replace="~{fragments/layout :: header}"></header>
 
-<main class="container">
-    <div class="page-head">
-        <h1>Admin · Products</h1>
-        <p class="muted">Only users with the ADMIN role (from the JWT) can create products or add stock.</p>
-    </div>
+<main class="container admin-container">
+    <section class="admin-hero">
+        <div class="admin-hero-copy">
+            <span class="admin-eyebrow"><i></i> FLASH SALE CONTROL CENTER</span>
+            <h1>Manage your <span>store.</span></h1>
+            <p>Manage your product catalogue, keep stock updated and launch new flash deals.</p>
+            <div class="admin-hero-meta">
+                <span><i></i> Product inventory</span>
+                <span><i></i> Live stock management</span>
+            </div>
+        </div>
+        <div class="admin-hero-visual" aria-hidden="true">
+            <div class="admin-orbit admin-orbit-one"></div>
+            <div class="admin-orbit admin-orbit-two"></div>
+            <div class="admin-cube"><span>✦</span></div>
+            <div class="admin-float-card admin-float-top"><b>⚡</b><small>STORE STATUS</small><strong>Active</strong></div>
+            <div class="admin-float-card admin-float-bottom"><i></i><small>INVENTORY</small><strong>Stock control</strong></div>
+        </div>
+    </section>
 
     <div th:replace="~{fragments/layout :: flash}"></div>
 
-    <div class="admin-layout">
-        <div class="card table-card">
-            <table>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th class="num">Price</th>
-                    <th class="num">Stock</th>
-                    <th>Add stock</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="p : ${products}">
-                    <td th:text="${p.id()}">1</td>
-                    <td th:text="${p.name()}">Name</td>
-                    <td class="num" th:text="'₹' + ${#numbers.formatDecimal(p.price(), 1, 'COMMA', 2, 'POINT')}">₹0</td>
-                    <td class="num">
-                        <span th:text="${p.availableStock()}">0</span>
-                        <span th:if="${p.soldOut()}" class="badge danger">Sold out</span>
-                    </td>
-                    <td>
-                        <form th:action="@{/admin/products/{id}/restock(id=${p.id()})}"
-                              method="post" class="inline-form">
-                            <input type="number" min="1" name="quantity" placeholder="Qty"
-                                   th:attr="aria-label='Add stock to ' + ${p.name()}" required>
-                            <button type="submit" class="button small">Add</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+    <section class="admin-workspace">
+        <div class="admin-inventory">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-kicker">YOUR CATALOGUE</span>
+                    <h2>Product inventory</h2>
+                    <p>Review available products and add stock when needed.</p>
+                </div>
+                <span class="admin-section-chip">✦ INVENTORY</span>
+            </div>
+
+            <div class="admin-table-card">
+                <div class="admin-table-scroll">
+                    <table class="admin-products-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>PRODUCT</th>
+                            <th class="num">PRICE</th>
+                            <th class="num">STOCK</th>
+                            <th>ADD STOCK</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="p : ${products}">
+                            <td class="admin-id" th:text="${p.id()}">1</td>
+                            <td>
+                                <span class="admin-product-name" th:text="${p.name()}">Name</span>
+                                <span th:if="${p.soldOut()}" class="admin-row-sold">Sold out</span>
+                            </td>
+                            <td class="num admin-price" th:text="'₹' + ${#numbers.formatDecimal(p.price(), 1, 'COMMA', 2, 'POINT')}">₹0</td>
+                            <td class="num"><span class="admin-stock-value" th:text="${p.availableStock()}">0</span></td>
+                            <td>
+                                <form th:action="@{/admin/products/{id}/restock(id=${p.id()})}"
+                                      method="post" class="admin-restock-form">
+                                    <input type="number" min="1" name="quantity" placeholder="Qty"
+                                           th:attr="aria-label='Add stock to ' + ${p.name()}" required>
+                                    <button type="submit" class="admin-small-button">Add <span>↗</span></button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="admin-table-footnote"><span></span> Stock changes are applied through the inventory service.</div>
+            </div>
         </div>
 
-        <form th:action="@{/admin/products}" th:object="${productForm}" method="post" class="card form">
+        <form th:action="@{/admin/products}" th:object="${productForm}" method="post" class="admin-create-panel">
+            <div class="admin-create-icon">＋</div>
+            <span class="admin-section-kicker">GROW YOUR STORE</span>
             <h2>New product</h2>
+            <p class="admin-create-description">Add a product to your flash sale catalogue.</p>
 
-            <label for="name">Name</label>
-            <input id="name" type="text" th:field="*{name}">
-            <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            <div class="admin-create-form">
+                <label for="name">Product name</label>
+                <input id="name" type="text" th:field="*{name}" placeholder="e.g. Wireless Headphones">
+                <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
 
-            <label for="price">Price (₹)</label>
-            <input id="price" type="number" step="0.01" min="0.01" th:field="*{price}">
-            <p class="field-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                <label for="price">Price (₹)</label>
+                <div class="admin-input-with-prefix">
+                    <span>₹</span>
+                    <input id="price" type="number" step="0.01" min="0.01" th:field="*{price}" placeholder="0.00">
+                </div>
+                <p class="field-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
 
-            <label for="stock">Stock</label>
-            <input id="stock" type="number" min="0" th:field="*{stock}">
-            <p class="field-error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></p>
+                <label for="stock">Opening stock</label>
+                <input id="stock" type="number" min="0" th:field="*{stock}" placeholder="Enter quantity">
+                <p class="field-error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></p>
 
-            <button type="submit" class="button">Create product</button>
+                <button type="submit" class="admin-create-button">Create product <span>↗</span></button>
+            </div>
+            <div class="admin-create-note"><span>◇</span> Product details can be managed after creation.</div>
         </form>
-    </div>
+    </section>
 </main>
 
 <footer th:replace="~{fragments/layout :: footer}"></footer>
