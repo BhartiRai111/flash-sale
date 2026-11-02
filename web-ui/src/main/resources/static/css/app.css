@@ -158,6 +158,7 @@ tr:last-child td { border-bottom: none; }
     position: relative;
     margin-bottom: 55px;
     color: white;
+    margin-top: 28px;
 }
 
 .hero-content {

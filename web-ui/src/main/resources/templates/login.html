@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
@@ -6,57 +5,94 @@
 
 <body class="login-body">
 
-<div class="login-wrapper">
+<header th:replace="~{fragments/layout :: header}"></header>
 
-    <!-- Left Section -->
+<main class="login-wrapper">
+
+    <!-- Left: futuristic visual panel -->
     <section class="login-banner">
-        <div class="brand">
-            <div class="brand-icon">✦</div>
-            <span>YourBrand</span>
-        </div>
+        <div class="banner-glow banner-glow-one"></div>
+        <div class="banner-glow banner-glow-two"></div>
 
-        <div class="banner-content">
-            <span class="welcome-tag">WELCOME BACK</span>
+        <div class="banner-copy">
+            <span class="welcome-tag">
+                <span class="live-dot"></span>
+                YOUR NEXT DEAL STARTS HERE
+            </span>
 
-            <h1>Manage your work.<br>
-                <span>Make it happen.</span>
+            <h1>
+                Welcome to the
+                <span>future of shopping.</span>
             </h1>
 
             <p>
-                Everything you need, all in one place.
-                Sign in and continue where you left off.
+                Discover exciting flash deals, track your orders
+                and enjoy a smarter shopping experience.
             </p>
 
-            <div class="banner-decoration">
-                <div class="decoration-circle circle-one"></div>
-                <div class="decoration-circle circle-two"></div>
-                <div class="decoration-card">
-                    <span class="status-dot"></span>
-                    Your workspace is ready
-                    <strong>Let's get started →</strong>
+            <div class="visual-stage" aria-hidden="true">
+                <div class="stage-orbit orbit-one"></div>
+                <div class="stage-orbit orbit-two"></div>
+                <div class="stage-platform platform-back"></div>
+                <div class="stage-platform platform-front"></div>
+
+                <div class="shopping-bag">
+                    <div class="bag-handle"></div>
+                    <div class="bag-face">
+                        <span class="bag-bolt">ϟ</span>
+                    </div>
+                </div>
+
+                <div class="floating-spark spark-one">✦</div>
+                <div class="floating-spark spark-two">✧</div>
+                <div class="floating-card">
+                    <span class="card-live-dot"></span>
+                    <span>FLASH SALE</span>
+                    <strong>Deals are live!</strong>
+                    <small>Don't miss out</small>
+                </div>
+                <div class="floating-percent">%</div>
+            </div>
+        </div>
+
+        <div class="banner-benefits">
+            <div class="benefit-item">
+                <span class="benefit-icon">↗</span>
+                <div>
+                    <strong>Fast delivery</strong>
+                    <small>Across India</small>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">◇</span>
+                <div>
+                    <strong>Secure checkout</strong>
+                    <small>Safe shopping</small>
+                </div>
+            </div>
+            <div class="benefit-item">
+                <span class="benefit-icon">↻</span>
+                <div>
+                    <strong>Easy tracking</strong>
+                    <small>Stay updated</small>
                 </div>
             </div>
         </div>
-
-        <div class="banner-footer">
-            © 2026 YourBrand. All rights reserved.
-        </div>
     </section>
 
-    <!-- Right Section -->
-    <main class="login-main">
-
+    <!-- Right: login form -->
+    <section class="login-main">
         <div class="login-card">
 
-            <div class="mobile-brand">
-                <div class="brand-icon">✦</div>
-                <strong>YourBrand</strong>
+            <div class="login-card-top">
+                <span class="login-card-icon">ϟ</span>
+                <span>FLASH SALE ACCOUNT</span>
             </div>
 
             <div class="login-heading">
-                <span class="heading-label">ACCOUNT LOGIN</span>
-                <h2>Welcome back 👋</h2>
-                <p>Enter your details to access your account.</p>
+                <span class="heading-label">WELCOME BACK</span>
+                <h2>Sign in to continue<span>.</span></h2>
+                <p>Enter your account details to access your deals.</p>
             </div>
 
             <div th:replace="~{fragments/layout :: flash}"></div>
@@ -68,9 +104,8 @@
 
                 <div class="form-group">
                     <label for="username">Username</label>
-
                     <div class="input-wrapper">
-                        <span class="input-icon">♙</span>
+                        <span class="input-icon" aria-hidden="true">♙</span>
                         <input id="username"
                                type="text"
                                th:field="*{username}"
@@ -78,7 +113,6 @@
                                autocomplete="username"
                                autofocus>
                     </div>
-
                     <p class="field-error"
                        th:if="${#fields.hasErrors('username')}"
                        th:errors="*{username}"></p>
@@ -86,81 +120,68 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-
                     <div class="input-wrapper">
-                        <span class="input-icon">♧</span>
-
+                        <span class="input-icon" aria-hidden="true">⌑</span>
                         <input id="password"
                                type="password"
                                th:field="*{password}"
                                placeholder="Enter your password"
                                autocomplete="current-password">
-
                         <button type="button"
                                 class="password-toggle"
-                                onclick="togglePassword()">
+                                onclick="togglePassword()"
+                                aria-label="Show or hide password">
                             Show
                         </button>
                     </div>
-
                     <p class="field-error"
                        th:if="${#fields.hasErrors('password')}"
                        th:errors="*{password}"></p>
                 </div>
 
                 <button type="submit" class="login-button">
-                    <span>Sign in to your account</span>
-                    <span class="button-arrow">→</span>
+                    <span>Log in to your account</span>
+                    <span class="button-arrow" aria-hidden="true">→</span>
                 </button>
-
             </form>
 
             <div class="demo-section">
                 <div class="demo-divider">
-                    <span>DEMO CREDENTIALS</span>
+                    <span>QUICK DEMO ACCESS</span>
                 </div>
 
                 <div class="demo-user">
-                    <div>
+                    <div class="demo-user-info">
                         <span class="demo-role">USER ACCOUNT</span>
-                        <strong>alice / alice123</strong>
+                        <strong>alice <span>/</span> alice123</strong>
                     </div>
-                    <button type="button"
-                            onclick="fillLogin('alice','alice123')">
-                        Use
-                    </button>
+                    <button type="button" onclick="fillLogin('alice','alice123')">Use account <span>→</span></button>
                 </div>
 
                 <div class="demo-user">
-                    <div>
+                    <div class="demo-user-info">
                         <span class="demo-role">USER ACCOUNT</span>
-                        <strong>bob / bob123</strong>
+                        <strong>bob <span>/</span> bob123</strong>
                     </div>
-                    <button type="button"
-                            onclick="fillLogin('bob','bob123')">
-                        Use
-                    </button>
+                    <button type="button" onclick="fillLogin('bob','bob123')">Use account <span>→</span></button>
                 </div>
 
                 <div class="demo-user">
-                    <div>
-                        <span class="demo-role">ADMIN ACCOUNT</span>
-                        <strong>admin / admin123</strong>
+                    <div class="demo-user-info">
+                        <span class="demo-role admin-role">ADMIN ACCOUNT</span>
+                        <strong>admin <span>/</span> admin123</strong>
                     </div>
-                    <button type="button"
-                            onclick="fillLogin('admin','admin123')">
-                        Use
-                    </button>
+                    <button type="button" onclick="fillLogin('admin','admin123')">Use account <span>→</span></button>
                 </div>
             </div>
 
             <p class="login-bottom">
-                Secure login · Your workspace, your control.
+                <span class="secure-icon">◇</span>
+                Secure login · Your shopping, your control.
             </p>
-
         </div>
-    </main>
-</div>
+    </section>
+</main>
 
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 

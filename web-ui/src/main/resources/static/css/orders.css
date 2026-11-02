@@ -1,0 +1,584 @@
+/* =========================================================
+   FUTURISTIC 3D STORE — MY ORDERS PAGE
+   Scoped to .orders-page so app.css and other pages stay safe.
+   ========================================================= */
+
+.orders-page {
+    --orders-bg: #061a16;
+    --orders-panel: rgba(10, 39, 32, .78);
+    --orders-panel-strong: rgba(11, 48, 39, .94);
+    --orders-line: rgba(116, 255, 207, .15);
+    --orders-mint: #70ffd0;
+    --orders-mint-strong: #24e6ad;
+    --orders-text: #eafff7;
+    --orders-muted: #91b8aa;
+    --orders-danger: #ff858c;
+    --orders-warning: #ffd27a;
+    min-height: 100vh;
+    color: var(--orders-text);
+    background:
+        radial-gradient(ellipse at 82% 8%, rgba(25, 190, 135, .15), transparent 34%),
+        radial-gradient(ellipse at 8% 35%, rgba(0, 111, 83, .18), transparent 36%),
+        linear-gradient(145deg, #04130f 0%, #08231c 48%, #041510 100%);
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+}
+
+.orders-page *,
+.orders-page *::before,
+.orders-page *::after {
+    box-sizing: border-box;
+}
+
+.orders-page a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.orders-page .orders-container {
+    width: min(1160px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+/* Subtle background grid */
+.orders-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .2;
+    background-image:
+        linear-gradient(rgba(112, 255, 208, .07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(112, 255, 208, .07) 1px, transparent 1px);
+    background-size: 54px 54px;
+    mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.orders-page .orders-main {
+    padding: 54px 0 76px;
+}
+
+/* Hero */
+.orders-page .orders-hero {
+    min-height: 280px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+    align-items: center;
+    gap: 30px;
+    padding: 34px 42px;
+    margin-bottom: 28px;
+    border: 1px solid var(--orders-line);
+    border-radius: 28px;
+    background:
+        linear-gradient(120deg, rgba(13, 57, 45, .92), rgba(5, 27, 22, .78)),
+        var(--orders-panel);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .25), inset 0 1px rgba(255,255,255,.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.orders-page .orders-hero::after {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    right: 12%;
+    top: -250px;
+    border-radius: 50%;
+    border: 1px solid rgba(112, 255, 208, .18);
+    box-shadow: 0 0 0 28px rgba(112,255,208,.025), 0 0 0 58px rgba(112,255,208,.02);
+    pointer-events: none;
+}
+
+.orders-page .orders-eyebrow,
+.orders-page .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--orders-mint);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.orders-page .orders-eyebrow::before,
+.orders-page .eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--orders-mint);
+    box-shadow: 0 0 10px var(--orders-mint);
+}
+
+.orders-page .orders-hero h1 {
+    margin: 15px 0 12px;
+    color: #f1fff9;
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: .98;
+    letter-spacing: -.055em;
+    font-weight: 850;
+}
+
+.orders-page .orders-hero h1 span {
+    color: var(--orders-mint);
+    text-shadow: 0 0 28px rgba(112,255,208,.24);
+}
+
+.orders-page .orders-hero p {
+    max-width: 490px;
+    margin: 0;
+    color: var(--orders-muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* 3D package illustration */
+.orders-page .orders-visual {
+    min-height: 210px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    perspective: 900px;
+}
+
+.orders-page .package-scene {
+    width: 170px;
+    height: 150px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+    animation: orders-float 5s ease-in-out infinite;
+}
+
+.orders-page .package-box {
+    width: 112px;
+    height: 100px;
+    position: relative;
+    transform: rotateX(-18deg) rotateY(-28deg);
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 24px 22px rgba(0,0,0,.35));
+}
+
+.orders-page .package-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #7dffda, #1eb88d);
+    clip-path: polygon(50% 0, 100% 25%, 100% 78%, 50% 100%, 0 76%, 0 25%);
+    box-shadow: inset -12px -8px 20px rgba(0, 75, 54, .3);
+}
+
+.orders-page .package-box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 48%, rgba(2, 91, 66, .35) 49%, rgba(2,91,66,.35) 52%, transparent 53%);
+    clip-path: polygon(50% 0, 100% 25%, 100% 78%, 50% 100%, 0 76%, 0 25%);
+}
+
+.orders-page .package-ribbon {
+    position: absolute;
+    width: 24px;
+    height: 100px;
+    top: 0;
+    left: 44px;
+    z-index: 2;
+    background: rgba(235,255,248,.7);
+    transform: skewY(25deg);
+    opacity: .7;
+}
+
+.orders-page .orbit,
+.orders-page .orders-orbit {
+    position: absolute;
+    width: 220px;
+    height: 76px;
+    border: 1px solid rgba(112,255,208,.42);
+    border-radius: 50%;
+    transform: rotate(-22deg);
+    box-shadow: 0 0 18px rgba(36,230,173,.1);
+}
+
+.orders-page .orbit.orbit-two,
+.orders-page .orders-orbit.orbit-two {
+    width: 250px;
+    height: 100px;
+    transform: rotate(42deg);
+    border-color: rgba(112,255,208,.2);
+}
+
+.orders-page .floating-chip,
+.orders-page .orders-floating-chip {
+    position: absolute;
+    z-index: 3;
+    padding: 9px 13px;
+    color: #dffff4;
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .04em;
+    white-space: nowrap;
+    border: 1px solid rgba(112,255,208,.25);
+    border-radius: 12px;
+    background: rgba(5, 32, 25, .82);
+    box-shadow: 0 12px 28px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.06);
+    backdrop-filter: blur(12px);
+}
+
+.orders-page .floating-chip.chip-one,
+.orders-page .orders-floating-chip.chip-one {
+    top: 18px;
+    right: 2px;
+    animation: orders-float 4.5s ease-in-out infinite;
+}
+
+.orders-page .floating-chip.chip-two,
+.orders-page .orders-floating-chip.chip-two {
+    bottom: 18px;
+    left: 0;
+    animation: orders-float 5.5s ease-in-out infinite reverse;
+}
+
+/* Auto refresh notice */
+.orders-page .auto-refresh,
+.orders-page .refresh-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 22px;
+    padding: 14px 18px;
+    color: #c9ffeb;
+    font-size: 13px;
+    border: 1px solid rgba(112,255,208,.2);
+    border-radius: 14px;
+    background: rgba(20, 105, 77, .17);
+}
+
+.orders-page .auto-refresh::before,
+.orders-page .refresh-notice::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--orders-mint);
+    box-shadow: 0 0 13px var(--orders-mint);
+}
+
+/* Orders panel and heading */
+.orders-page .orders-panel,
+.orders-page .orders-card,
+.orders-page .orders-content {
+    padding: 26px;
+    border: 1px solid var(--orders-line);
+    border-radius: 22px;
+    background: linear-gradient(145deg, rgba(10,43,34,.92), rgba(5,25,20,.94));
+    box-shadow: 0 22px 55px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.035);
+}
+
+.orders-page .orders-section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.orders-page .orders-section-heading h2,
+.orders-page .orders-panel h2,
+.orders-page .orders-card h2 {
+    margin: 0;
+    color: #edfff7;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+
+.orders-page .orders-section-heading p {
+    margin: 7px 0 0;
+    color: var(--orders-muted);
+    font-size: 13px;
+}
+
+/* Table */
+.orders-page .orders-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid rgba(112,255,208,.12);
+    border-radius: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(112,255,208,.35) transparent;
+}
+
+.orders-page .orders-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.orders-page .orders-table thead {
+    background: rgba(112,255,208,.07);
+}
+
+.orders-page .orders-table th {
+    padding: 16px 18px;
+    color: #8fb9aa;
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .13em;
+    white-space: nowrap;
+}
+
+.orders-page .orders-table td {
+    padding: 18px;
+    color: #d8f2e8;
+    font-size: 13px;
+    border-top: 1px solid rgba(112,255,208,.09);
+    vertical-align: middle;
+}
+
+.orders-page .orders-table tbody tr {
+    transition: background .2s ease;
+}
+
+.orders-page .orders-table tbody tr:hover {
+    background: rgba(112,255,208,.045);
+}
+
+.orders-page .order-id,
+.orders-page .orders-table a {
+    color: var(--orders-mint);
+    font-weight: 800;
+}
+
+.orders-page .orders-table a:hover {
+    color: #c0ffe9;
+    text-shadow: 0 0 14px rgba(112,255,208,.3);
+}
+
+.orders-page .order-product,
+.orders-page .product-name {
+    color: #f0fff8;
+    font-weight: 650;
+}
+
+.orders-page .order-date,
+.orders-page .muted {
+    color: var(--orders-muted);
+}
+
+/* Status pills */
+.orders-page .status,
+.orders-page .status-badge,
+.orders-page .order-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 27px;
+    padding: 5px 10px;
+    border: 1px solid rgba(112,255,208,.2);
+    border-radius: 999px;
+    color: #9fffdc;
+    background: rgba(36,230,173,.09);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.orders-page .status::before,
+.orders-page .status-badge::before,
+.orders-page .order-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 9px currentColor;
+}
+
+.orders-page .status.cancelled,
+.orders-page .status-badge.cancelled,
+.orders-page .order-status.cancelled,
+.orders-page .status-cancelled {
+    color: #ff9ba1;
+    border-color: rgba(255,133,140,.22);
+    background: rgba(255,95,105,.08);
+}
+
+.orders-page .status.pending,
+.orders-page .status-badge.pending,
+.orders-page .order-status.pending,
+.orders-page .status-pending {
+    color: var(--orders-warning);
+    border-color: rgba(255,210,122,.22);
+    background: rgba(255,190,80,.08);
+}
+
+/* Empty state */
+.orders-page .empty-state,
+.orders-page .orders-empty {
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 42px 20px;
+    text-align: center;
+    border: 1px dashed rgba(112,255,208,.22);
+    border-radius: 18px;
+    background: rgba(4, 24, 18, .45);
+}
+
+.orders-page .empty-icon {
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+    color: var(--orders-mint);
+    font-size: 30px;
+    border: 1px solid rgba(112,255,208,.25);
+    border-radius: 23px;
+    background: rgba(36,230,173,.08);
+    box-shadow: 0 0 35px rgba(36,230,173,.08);
+}
+
+.orders-page .empty-state h2,
+.orders-page .orders-empty h2 {
+    margin: 0 0 9px;
+    color: #edfff7;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.orders-page .empty-state p,
+.orders-page .orders-empty p {
+    max-width: 390px;
+    margin: 0 0 22px;
+    color: var(--orders-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* Buttons */
+.orders-page .btn-primary,
+.orders-page .explore-btn,
+.orders-page a.button-primary {
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 20px;
+    color: #032219;
+    font-size: 13px;
+    font-weight: 850;
+    border: 1px solid rgba(192,255,233,.75);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #9affdf, #35e8b0);
+    box-shadow: 0 9px 26px rgba(36,230,173,.18), inset 0 1px rgba(255,255,255,.65);
+    transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.orders-page .btn-primary:hover,
+.orders-page .explore-btn:hover,
+.orders-page a.button-primary:hover {
+    color: #021b13;
+    transform: translateY(-3px);
+    filter: brightness(1.06);
+    box-shadow: 0 14px 32px rgba(36,230,173,.25);
+}
+
+/* Small supporting note */
+.orders-page .orders-footnote {
+    margin: 18px 4px 0;
+    color: rgba(145,184,170,.72);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+    .orders-page .orders-container {
+        width: min(100% - 28px, 600px);
+    }
+
+    .orders-page .orders-main {
+        padding: 28px 0 48px;
+    }
+
+    .orders-page .orders-hero {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        padding: 28px 24px 18px;
+        border-radius: 22px;
+    }
+
+    .orders-page .orders-hero h1 {
+        font-size: clamp(38px, 11vw, 54px);
+    }
+
+    .orders-page .orders-visual {
+        min-height: 185px;
+    }
+
+    .orders-page .orders-panel,
+    .orders-page .orders-card,
+    .orders-page .orders-content {
+        padding: 17px;
+        border-radius: 18px;
+    }
+
+    .orders-page .orders-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 420px) {
+    .orders-page .orders-container {
+        width: calc(100% - 22px);
+    }
+
+    .orders-page .orders-hero {
+        padding: 24px 19px 12px;
+    }
+
+    .orders-page .orders-hero p {
+        font-size: 13px;
+    }
+
+    .orders-page .orders-panel,
+    .orders-page .orders-card,
+    .orders-page .orders-content {
+        padding: 13px;
+    }
+
+    .orders-page .orders-table td,
+    .orders-page .orders-table th {
+        padding: 14px 12px;
+    }
+}
+
+@keyframes orders-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-11px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orders-page *,
+    .orders-page *::before,
+    .orders-page *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+    }
+}
