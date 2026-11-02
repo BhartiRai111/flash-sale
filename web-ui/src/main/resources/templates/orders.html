@@ -92,7 +92,7 @@
 
                         <td>
                             <span class="order-product"
-                                  th:text="${productNames.containsKey(o.productId())} ? productNames.get(o.productId()) : 'Product #' + o.productId()">
+                                  th:text="${productNames.containsKey(o.productId())} ? ${productNames.get(o.productId())} : 'Product #' + ${o.productId()}">
                                 Product Name
                             </span>
                         </td>
